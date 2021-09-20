@@ -2,7 +2,7 @@ require 'csv'
 require 'yaml'
 require 'set'
 
-N = 10000
+N = 70
 TRAITS_DISTRIBUTION_FILE = 'traits_config.yml'
 DNA_FILE = 'dna.csv'
 
