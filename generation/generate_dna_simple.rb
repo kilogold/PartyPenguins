@@ -7,7 +7,11 @@ TRAITS_DISTRIBUTION_FILE = 'traits_config.yml'
 DNA_FILE = 'dna.csv'
 
 raw_traits = YAML.load_file(TRAITS_DISTRIBUTION_FILE)['traits']
-trait_probabilities = raw_traits.transform_values { |dist_h| dist_h.map { |k,v| [k]*v.to_i }.flatten }
+trait_probabilities = raw_traits.transform_values { 
+  |dist_h| dist_h.map { 
+    |k,v| [k]*v.to_i 
+  }.flatten 
+}
 
 # verify that size of all probabilities is 100
 if trait_probabilities.values.map{|v| v.size%100 }.uniq != [0]
