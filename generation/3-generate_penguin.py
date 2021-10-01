@@ -6,7 +6,7 @@ from multiprocessing import Pool
 
 override = True
 asset_folder = "assets"
-dna_file = "dna.csv"
+dna_file = "dna_dag.csv"
 output_folder = "output"
 
 def generate_img(params):
@@ -15,6 +15,11 @@ def generate_img(params):
         if not override and f'{serial_no}.png' in existing_images:
             print(f"Skipping image #{serial_no}")
             return
+
+        for i,trt in enumerate(list(traits)):
+            if trt.endswith("None"):
+                traits.remove(trt)
+            
         all_assets = [Image.open(f'{asset_folder}/{trait}.png') for trait in traits]
         base_image = all_assets[0]
         for img in all_assets[1:]:

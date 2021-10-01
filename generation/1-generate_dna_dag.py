@@ -1,9 +1,5 @@
 import os.path, os, random
-from typing import Collection
-from collections import deque
-from pathlib import Path
 
-import os, sys
 def splitall(path):
     allparts = []
     while 1:
@@ -57,14 +53,17 @@ class Node:
         self.count -= 1
 
         genes = list()
-        for dir in trace:
-            selection = random.choice(os.listdir(dir))
-            genes.append(os.path.splitext(selection)[0])
+        for dir in g_dna_attributes:
+            if not dir in trace:
+                genes.append("None")
+            else:
+                selection = random.choice(os.listdir(asset_dir + dir))
+                genes.append(os.path.splitext(selection)[0])
 
         return genes
 
     def generate_dna(self, genes):
-        dna = "--".join(genes)
+        dna = "--".join(genes)       
         return dna
 
     def process(self):
@@ -77,16 +76,8 @@ class Node:
         while self.count > 0:    
             genes = self.get_genes(trace)
             dna = self.generate_dna(genes)
+            dna_catalog.append(dna)
 
-
-d_mask =  Node("D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\mask",4, None)
-d_mouth = Node("D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\mouth",3, None)
-d_face = Node("D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\race",2, [d_mask,d_mouth])
-d_background = Node("D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\background", 0, [d_face])
-
-dna_catalog = list()
-
-g_dna_width = 3
 
 def bfs_traverse_recursive(node):
 
@@ -104,8 +95,29 @@ def bfs_traverse_recursive(node):
     # Unwinding Work:
     node.process()
 
-# MAIN
-bfs_traverse_recursive(d_background)
-print(*dna_catalog, sep = "\n")
+if __name__ == '__main__':
 
-# Generate CSV manually
+    g_dna_attributes = ["background", "race", "mouth", "mask"]
+    g_dna_width = len(g_dna_attributes)
+
+    asset_dir = "D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\"
+
+    d_mask       = Node(g_dna_attributes[3], 4, None)
+    d_mouth      = Node(g_dna_attributes[2], 3, None)
+    d_face       = Node(g_dna_attributes[1], 2, [d_mask,d_mouth])
+    d_background = Node(g_dna_attributes[0], 0, [d_face])
+
+    dna_catalog = list()
+
+    bfs_traverse_recursive(d_background)
+    print(*dna_catalog, sep = "\n")
+
+    # Generate CSV manually
+    with open("dna_dag.csv", 'w') as out_file:
+        out_file.write("serial,background,race,mouth,mask,dna\n")
+
+        for (i, entry) in enumerate(dna_catalog):
+            line = "{},".format(i)
+            line += entry.replace('--', ',')
+            line += ",{}\n".format(entry)
+            out_file.write(line)

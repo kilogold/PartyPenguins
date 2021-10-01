@@ -1,5 +1,5 @@
 import csv
-dna_file = "dna.csv"
+dna_file = "dna_dag.csv"
 
 dnas = []
 with open(dna_file, mode='r') as csv_file:

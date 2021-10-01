@@ -1,0 +1,10 @@
+serial,background,race,mouth,mask,dna
+0,bkg02,sunda,None,_0000_mask23,bkg02--sunda--None--_0000_mask23
+1,bkg02,greater_hog,None,_0000_mask23,bkg02--greater_hog--None--_0000_mask23
+2,bkg01,nevadensis,None,_0001_mask10,bkg01--nevadensis--None--_0001_mask10
+3,bkg01,japanese,None,_0001_mask10,bkg01--japanese--None--_0001_mask10
+4,bkg02,vietnam,_0018_mouth23,None,bkg02--vietnam--_0018_mouth23--None
+5,bkg01,greater_hog,_0008_mouth24,None,bkg01--greater_hog--_0008_mouth24--None
+6,bkg01,japanese,_0027_mouth22,None,bkg01--japanese--_0027_mouth22--None
+7,bkg01,american,None,None,bkg01--american--None--None
+8,bkg01,honey,None,None,bkg01--honey--None--None
