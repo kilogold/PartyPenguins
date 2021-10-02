@@ -97,14 +97,16 @@ def bfs_traverse_recursive(node):
 
 if __name__ == '__main__':
 
-    g_dna_attributes = ["background", "race", "mouth", "mask"]
+    g_dna_attributes = ["background", "race", "mouth", "mask", "hairhat", "glasses"]
     g_dna_width = len(g_dna_attributes)
 
     asset_dir = "D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\"
-
-    d_mask       = Node(g_dna_attributes[3], 4, None)
-    d_mouth      = Node(g_dna_attributes[2], 3, None)
-    d_face       = Node(g_dna_attributes[1], 2, [d_mask,d_mouth])
+    
+    d_glasses    = Node(g_dna_attributes[5], 30, None)
+    d_hairhat    = Node(g_dna_attributes[4], 30, None)
+    d_mask       = Node(g_dna_attributes[3], 40, None)
+    d_mouth      = Node(g_dna_attributes[2], 30, None)
+    d_face       = Node(g_dna_attributes[1], 20, [d_mask,d_mouth, d_glasses, d_hairhat])
     d_background = Node(g_dna_attributes[0], 0, [d_face])
 
     dna_catalog = list()
@@ -114,7 +116,7 @@ if __name__ == '__main__':
 
     # Generate CSV manually
     with open("dna_dag.csv", 'w') as out_file:
-        out_file.write("serial,background,race,mouth,mask,dna\n")
+        out_file.write("serial,{},dna\n".format(",".join(g_dna_attributes)))
 
         for (i, entry) in enumerate(dna_catalog):
             line = "{},".format(i)
