@@ -27,7 +27,8 @@ class Node:
             return
 
         for child in children:
-            child.parent = self
+            if child is not None:
+                child.parent = self
 
     def get_trace_paths(self):
 
@@ -53,7 +54,7 @@ class Node:
         self.count -= 1
 
         genes = list()
-        for dir in g_dna_attributes:
+        for dir in attr:
             if not dir in trace:
                 genes.append("None")
             else:
@@ -97,26 +98,37 @@ def bfs_traverse_recursive(node):
 
 if __name__ == '__main__':
 
-    g_dna_attributes = ["background", "race", "mouth", "mask", "hairhat", "glasses"]
-    g_dna_width = len(g_dna_attributes)
+    attr = ["background", "race", "mouth", "mask", "hairhat", "glasses"]
+    g_dna_width = len(attr)
 
     asset_dir = "D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\"
     
-    d_glasses    = Node(g_dna_attributes[5], 30, None)
-    d_hairhat    = Node(g_dna_attributes[4], 30, None)
-    d_mask       = Node(g_dna_attributes[3], 40, None)
-    d_mouth      = Node(g_dna_attributes[2], 30, None)
-    d_face       = Node(g_dna_attributes[1], 20, [d_mask,d_mouth, d_glasses, d_hairhat])
-    d_background = Node(g_dna_attributes[0], 0, [d_face])
+    d_root = \
+    Node("background", 0, [
+        Node("race", 20, [
+            Node("mask", 40, None),
+            Node("mouth", 30, None),
+            Node("glasses", 30, [
+                Node("mouth", 30, None),
+                None
+                ]), 
+            Node("hairhat", 30, [
+                Node("mask", 40, None),
+                Node("mouth", 30, None),
+                Node("glasses", 30, None),
+                None
+                ]) 
+            ])
+        ])
 
     dna_catalog = list()
 
-    bfs_traverse_recursive(d_background)
+    bfs_traverse_recursive(d_root)
     print(*dna_catalog, sep = "\n")
 
     # Generate CSV manually
     with open("dna_dag.csv", 'w') as out_file:
-        out_file.write("serial,{},dna\n".format(",".join(g_dna_attributes)))
+        out_file.write("serial,{},dna\n".format(",".join(attr)))
 
         for (i, entry) in enumerate(dna_catalog):
             line = "{},".format(i)
