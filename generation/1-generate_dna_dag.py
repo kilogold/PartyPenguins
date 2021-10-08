@@ -15,6 +15,8 @@ def splitall(path):
             allparts.insert(0, parts[1])
     return allparts
 
+
+
 class Node:
     def __init__(self, asset_dir, count, children):
         self.asset_dir = asset_dir
@@ -98,27 +100,49 @@ def bfs_traverse_recursive(node):
 
 if __name__ == '__main__':
 
-    attr = ["background", "race", "mouth", "mask", "hairhat", "glasses"]
+    attr = ["background", "race_american", "race_european", "race_pliotaxidea", "race_honey", "race_suda", "mouth", "mask", "hairhat", "hairhat_suda","glasses"]
+
     g_dna_width = len(attr)
 
     asset_dir = "D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\"
     
+
+    def get_predefined_node(race):
+        return  Node(race, 20, [
+                    Node("mask", 40, None),
+                    Node("mouth", 30, None),
+                    Node("glasses", 30, [
+                        Node("mouth", 30, None),
+                        None
+                        ]), 
+                    Node("hairhat", 30, [
+                        Node("mask", 40, None),
+                        Node("mouth", 30, None),
+                        Node("glasses", 30, None),
+                        None
+                        ]) 
+                    ])
+
     d_root = \
     Node("background", 0, [
-        Node("race", 20, [
-            Node("mask", 40, None),
-            Node("mouth", 30, None),
-            Node("glasses", 30, [
-                Node("mouth", 30, None),
-                None
-                ]), 
-            Node("hairhat", 30, [
-                Node("mask", 40, None),
-                Node("mouth", 30, None),
-                Node("glasses", 30, None),
-                None
-                ]) 
-            ])
+        get_predefined_node("race_american"), 
+        get_predefined_node("race_european"), 
+        get_predefined_node("race_pliotaxidea"), 
+        get_predefined_node("race_honey"),
+        Node("race_suda", 20, [
+                    Node("mask", 40, None),
+                    Node("mouth", 30, None),
+                    Node("glasses", 30, [
+                        Node("mouth", 30, None),
+                        None
+                        ]), 
+                    Node("hairhat_suda", 30, [
+                        Node("mask", 40, None),
+                        Node("mouth", 30, None),
+                        Node("glasses", 30, None),
+                        None
+                        ]) 
+                    ])
         ])
 
     dna_catalog = list()
