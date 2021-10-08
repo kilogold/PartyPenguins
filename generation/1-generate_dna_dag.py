@@ -60,10 +60,27 @@ class Node:
             if not dir in trace:
                 genes.append("None")
             else:
-                selection = random.choice(os.listdir(asset_dir + dir))
+                selection = self.__select_filepath(trace,dir)
+                if "race_suda" in trace and dir == "background":
+                    print(selection)
                 genes.append(os.path.splitext(selection)[0])
 
         return genes
+
+    
+    def __determine_race(self, trace):
+        return trace[1].removeprefix("race_") #HACK: Assuming this index is always the race.
+
+
+    def __select_filepath(self, trace, dir): #TODO: Make more generic for Node class        
+        # if "race_suda" in trace and dir == "hairhat": 
+        #     dir = "hairhat_suda"
+
+        # if dir == "fur_face" or dir == "fur_side" or dir == "fur_top":
+        #     race_name = self.__determine_race(trace)
+        #     dir = f"{dir}_{race_name}"
+        
+        return random.choice(os.listdir(asset_dir + dir))
 
     def generate_dna(self, genes):
         dna = "--".join(genes)       
@@ -100,7 +117,18 @@ def bfs_traverse_recursive(node):
 
 if __name__ == '__main__':
 
-    attr = ["background", "race_american", "race_european", "race_pliotaxidea", "race_honey", "race_suda", "mouth", "mask", "hairhat", "hairhat_suda","glasses"]
+    attr = [
+    "background", 
+    "race_american", "race_european", "race_pliotaxidea", "race_honey", "race_suda", 
+    "fur_face_american", "fur_side_american", "fur_top_american", 
+    "fur_face_european", "fur_side_european", "fur_top_european", 
+    "fur_face_pliotaxidea", "fur_side_pliotaxidea", "fur_top_pliotaxidea", 
+    "fur_face_honey", "fur_side_honey", "fur_top_honey", 
+    "fur_face_suda", "fur_side_suda", "fur_top_suda", 
+    "mouth", 
+    "mask", 
+    "hairhat", "hairhat_suda",
+    "glasses"]
 
     g_dna_width = len(attr)
 
@@ -108,20 +136,28 @@ if __name__ == '__main__':
     
 
     def get_predefined_node(race):
-        return  Node(race, 20, [
-                    Node("mask", 40, None),
-                    Node("mouth", 30, None),
-                    Node("glasses", 30, [
-                        Node("mouth", 30, None),
-                        None
-                        ]), 
-                    Node("hairhat", 30, [
-                        Node("mask", 40, None),
-                        Node("mouth", 30, None),
-                        Node("glasses", 30, None),
-                        None
-                        ]) 
+        race_name = race.removeprefix("race_")
+        return  Node(race, 4, [
+                    Node(f"fur_face_{race_name}", 0, [
+                        Node(f"fur_side_{race_name}", 0, [
+                            Node(f"fur_top_{race_name}", 0, [
+                                Node("mask", 40, None),
+                                Node("mouth", 30, None),
+                                Node("glasses", 30, [
+                                    Node("mouth", 30, None),
+                                    None
+                                ]), 
+                                Node("hairhat", 30, [
+                                    Node("mask", 40, None),
+                                    Node("mouth", 30, None),
+                                    Node("glasses", 30, None),
+                                    None
+                                ])
+                            ])
+                        ])
                     ])
+                ]) 
+
 
     d_root = \
     Node("background", 0, [
@@ -129,26 +165,34 @@ if __name__ == '__main__':
         get_predefined_node("race_european"), 
         get_predefined_node("race_pliotaxidea"), 
         get_predefined_node("race_honey"),
-        Node("race_suda", 20, [
-                    Node("mask", 40, None),
-                    Node("mouth", 30, None),
-                    Node("glasses", 30, [
-                        Node("mouth", 30, None),
-                        None
-                        ]), 
-                    Node("hairhat_suda", 30, [
+        Node("race_suda", 4, [
+            Node(f"fur_face_suda", 0, [
+                Node(f"fur_side_suda", 0, [
+                    Node(f"fur_top_suda", 0, [
                         Node("mask", 40, None),
                         Node("mouth", 30, None),
-                        Node("glasses", 30, None),
-                        None
-                        ]) 
+                        Node("glasses", 30, [
+                            Node("mouth", 30, None),
+                            None
+                        ]), 
+                        Node("hairhat_suda", 30, [
+                            Node("mask", 40, None),
+                            Node("mouth", 30, None),
+                            Node("glasses", 30, None),
+                            None
+                        ])
                     ])
-        ])
+                ])
+            ])
+        ]) 
+    ])
 
     dna_catalog = list()
 
     bfs_traverse_recursive(d_root)
-    print(*dna_catalog, sep = "\n")
+    
+    # Uncomment to output result on console.
+    #print(*dna_catalog, sep = "\n")
 
     # Generate CSV manually
     with open("dna_dag.csv", 'w') as out_file:
