@@ -132,7 +132,7 @@ if __name__ == '__main__':
 
     g_dna_width = len(attr)
 
-    asset_dir = "D:\\Projects\\BadgerDAO\\PartyPenguins\\generation\\assets\\"
+    asset_dir = ".\\assets\\"
     
 
     def get_predefined_node(race):
